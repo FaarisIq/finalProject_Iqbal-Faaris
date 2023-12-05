@@ -22,7 +22,7 @@ BLUE = (0, 0, 255)
 DARKGREEN = (38, 69, 11)
 
 
-PLATFORM_LIST = [(0, HEIGHT * 3 / 4, 500, 100,"normal"),
+PLATFORM_LIST = [(0, HEIGHT * 3 / 4, 360, 100,"normal"),
                  (125, 50, 100, 20, "normal"),
                  (30, 200, 100, 20, "normal"),
                  (230, 200, 100, 20, "normal")]
