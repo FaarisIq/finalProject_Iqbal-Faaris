@@ -10,6 +10,7 @@ import math
 
 # This file was created by: Faaris Iqbal
 # Content from Chris Bradfield; Kids Can Code
+# Logo image source: https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2FDwayneJohnson%2Fphotos%2Fa.448580834383%2F10154509349039384%2F%3Ftype%3D3
 # KidsCanCode - Game Development with Pygame video series
 # Video link: https://youtu.be/OmlQ0XCvIn0 
 
