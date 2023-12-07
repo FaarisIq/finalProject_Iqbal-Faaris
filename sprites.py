@@ -52,6 +52,15 @@ class Player1(Sprite):
         self.vel += self.acc
         self.pos += self.vel + 0.5 * self.acc
         self.rect.midbottom = self.pos
+        if self.pos.x < 0:
+            self.pos.x = 15
+        if self.pos.y > HEIGHT:
+            self.pos.x = HEIGHT - 10
+        if self.pos.x > WIDTH:
+            self.pos.x = WIDTH - 15
+        if self.pos.y < 0:
+            self.pos.y = 15
+
 
 
 # Player2 class (similar structure to Player1)
@@ -92,6 +101,14 @@ class Player2(Sprite):
         self.vel += self.acc
         self.pos += self.vel + 0.5 * self.acc
         self.rect.midbottom = self.pos
+        if self.pos.x < 0:
+            self.pos.x = 15
+        if self.pos.y > HEIGHT:
+            self.pos.x = HEIGHT - 10
+        if self.pos.x > WIDTH:
+            self.pos.x = WIDTH - 15
+        if self.pos.y < 0:
+            self.pos.y = 15
 
 # Platform class
 class Platform(Sprite):
@@ -114,78 +131,4 @@ class Platform(Sprite):
             if self.rect.x + self.rect.w > WIDTH or self.rect.x < 0:
                 self.speed = -self.speed
 
-# Mob1 class (similar structure to Mob2)
-class Mob1(Sprite):
-    def __init__(self, game, x, y, w, h, kind):
-        Sprite.__init__(self)
-        self.game = game
-        self.image = pg.Surface((w, h))
-        self.image.fill(BLUE)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.kind = kind
-        self.pos = vec(WIDTH/2, 400)
-        self.mobspeedx = 1
-        self.mobspeedy = 1
-        self.acceleration = 0.0035  # Adjust the acceleration rate as needed
-
-    def update(self):
-        # Update for Mob1
-        if self.game.player1.rect.colliderect(self.rect):
-            self.game.p1_won = False
-            self.game.p2_won = True
-            self.game.playing = False
-        if self.game.player1.rect.x > self.rect.x:
-            self.rect.x += self.mobspeedx
-            self.mobspeedx += self.acceleration
-        elif self.game.player1.rect.x < self.rect.x:
-            self.rect.x -= self.mobspeedx
-            self.mobspeedx += self.acceleration
-
-        if self.game.player1.rect.y > self.rect.y:
-            self.rect.y += self.mobspeedy
-            self.mobspeedy += self.acceleration
-        elif self.game.player1.rect.y < self.rect.y:
-            self.rect.y -= self.mobspeedy
-            self.mobspeedy += self.acceleration
-        if self.mobspeedy == self.game.player1.rect.y + 1 or self.mobspeedy == self.game.player1.rect.y - 1 and self.mobspeedx == self.game.player1.rect.x + 1 or self.mobspeedx == self.game.player1.rect.x - 1:
-            self.acceleration = 0
-
-# Mob2 class
-class Mob2(Sprite):
-    def __init__(self, game, x, y, w, h, kind):
-        Sprite.__init__(self)
-        self.game = game
-        self.image = pg.Surface((w, h))
-        self.image.fill(DARKGREEN)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.kind = kind
-        self.pos = vec(WIDTH/2, 400)
-        self.mobspeedx = 1
-        self.mobspeedy = 1
-        self.acceleration = 0.005  # Adjust the acceleration rate as needed
-
-    def update(self):
-        # Update for Mob2
-        if self.game.player2.rect.colliderect(self.rect):
-            self.game.p1_won = True
-            self.game.p2_won = False
-            self.game.playing = False
-        if self.game.player2.rect.x > self.rect.x:
-            self.rect.x += self.mobspeedx
-            self.mobspeedx += self.acceleration
-        elif self.game.player2.rect.x < self.rect.x:
-            self.rect.x -= self.mobspeedx
-            self.mobspeedx += self.acceleration
-
-        if self.game.player2.rect.y > self.rect.y:
-            self.rect.y += self.mobspeedy
-            self.mobspeedy += self.acceleration
-        elif self.game.player2.rect.y < self.rect.y:
-            self.rect.y -= self.mobspeedy
-            self.mobspeedy += self.acceleration
-        if self.mobspeedy == self.game.player1.rect.y + 1 or self.mobspeedy == self.game.player1.rect.y - 1 and self.mobspeedx == self.game.player1.rect.x + 1 or self.mobspeedx == self.game.player1.rect.x - 1:
-            self.acceleration = 0
+        

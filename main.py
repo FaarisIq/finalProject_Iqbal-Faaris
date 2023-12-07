@@ -21,7 +21,6 @@ Goals:
 Make an arena with platforms
 Make two characters with guns
 If other person is shot, the game ends
-If bottom of platform is hit they don't hit the top
 They also have a melee they can use if close enough
 '''
 
@@ -40,7 +39,7 @@ class Game:
     def __init__(self):
         self.p1_won = False
         self.p2_won = False
-        # Initialize pygame and create a window
+        # Initialize pygame and create a windoww
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -54,8 +53,6 @@ class Game:
         self.score = 0
         self.all_sprites = pg.sprite.Group()
         self.all_platforms = pg.sprite.Group()
-        self.all_mobs = pg.sprite.Group()
-
         # Instantiate player classes
         self.player1 = Player1(self)
         self.player2 = Player2(self)
@@ -73,14 +70,6 @@ class Game:
             self.all_sprites.add(plat)
             self.all_platforms.add(plat)
 
-        # Create mobs
-        for m in range(0, 1):
-            m1 = Mob1(self, randint(0, WIDTH), randint(0, math.floor(HEIGHT / 2)), 20, 20, "normal")
-            self.all_sprites.add(m1)
-            self.all_mobs.add(m1)
-            m2 = Mob2(self, randint(0, WIDTH), randint(0, math.floor(HEIGHT / 2)), 20, 20, "normal")
-            self.all_sprites.add(m2)
-            self.all_mobs.add(m2)
 
         self.run()
     def draw_text(self, text, size, color, x, y):
