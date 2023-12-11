@@ -32,9 +32,9 @@ class Player1(Sprite):
         # Player1 controls
         keys = pg.key.get_pressed()
         if keys[pg.K_a]:
-            self.acc.x = -5
+            self.acc.x = -3
         if keys[pg.K_d]:
-            self.acc.x = 5
+            self.acc.x = 3
         if keys[pg.K_w]:
             self.jump()
 
@@ -81,9 +81,9 @@ class Player2(Sprite):
         # Player2 controls
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
-            self.acc.x = -5
+            self.acc.x = -3
         if keys[pg.K_RIGHT]:
-            self.acc.x = 5
+            self.acc.x = 3
         if keys[pg.K_UP]:
             self.jump()
 
