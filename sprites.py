@@ -65,7 +65,7 @@ class Player1(Sprite):
 class Bullet(Sprite):
     def __init__(self, player_pos, direction):
         Sprite.__init__(self)
-        self.image = pg.image.load(os.path.join(img_folder, 'pew.png')).convert()
+        self.image = pg.image.load(os.path.join(img_folder, 'bullet.png')).convert()
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
 
