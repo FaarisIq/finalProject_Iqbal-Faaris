@@ -99,6 +99,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
+            self.shoot()  # Add this line to check for player input and shoot bullets
 
             # Check for player wins
             if self.player2.rect.y > HEIGHT and not self.p1_won:
@@ -162,6 +163,7 @@ class Game:
 
     def shoot(self):
         # Shooting logic
+        pg.init()
         keys_p1 = pg.key.get_pressed()
         keys_p2 = pg.key.get_pressed()
 
@@ -201,6 +203,7 @@ gamerun = True
 g = Game()
 while gamerun:
     g.new()
+    g.shoot()
 
 
 # Quit pygame

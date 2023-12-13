@@ -20,7 +20,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 DARKGREEN = (38, 69, 11)
-BULLETSPEED = 10
+BULLET_SPEED = 10
 
 PLATFORM_LIST = [(0, HEIGHT * 3 / 4, 360, 100,"normal"),
                  (145, 50, 70, 15, "normal"),

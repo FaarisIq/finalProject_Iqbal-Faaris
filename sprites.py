@@ -4,6 +4,7 @@
 # Video link: https://youtu.be/OmlQ0XCvIn0 
 
 import pygame as pg
+from pygame.locals import *
 from pygame.sprite import Sprite
 from pygame.math import Vector2 as vec
 import os
