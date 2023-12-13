@@ -62,35 +62,22 @@ class Player1(Sprite):
             self.pos.y = 15
 
 class Bullet(Sprite):
-    def __init__(self):
+    def __init__(self, player_pos, direction):
         Sprite.__init__(self)
-        # uses an image
         self.image = pg.image.load(os.path.join(img_folder, 'pew.png')).convert()
-        # if there are black pixels, don't draw them
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        # spawn at the player's position and a bit down and forward to make it come out of the front nose of the player image
-        self.pos = vec(PLAYER_POS) - vec(-30, 20)
-        self.vel = vec(0,0)
-        self.acc = vec(0,0)
 
-    def update(self):
-        # speed at which the bullet will move
-        self.acc = vec(5,0)
-        # equations of motion
-        self.acc.x += self.vel.x * -PLAYER_FRIC/2
-        self.vel += self.acc
-        self.pos += self.vel + 0.5 * self.acc
-        self.rect.midbottom = self.pos
-        # if bullet goes off screen, stop loading it
-        if self.rect.left < 0:
-            pg.sprite.Sprite.kill(self)
-        if self.rect.bottom > HEIGHT:
-            pg.sprite.Sprite.kill(self)
-        if self.rect.top < 0:
-            pg.sprite.Sprite.kill(self)
-        if self.rect.right > WIDTH:
-            pg.sprite.Sprite.kill(self)   
+        # Set initial position based on the player's position
+        self.pos = vec(player_pos)
+
+        # Set initial velocity based on the direction
+        if direction == "left":
+            self.vel = vec(-BULLET_SPEED, 0)
+        elif direction == "right":
+            self.vel = vec(BULLET_SPEED, 0)
+
+        self.acc = vec(0, 0)
 # Player2 class (similar structure to Player1)
 class Player2(Sprite):
     def __init__(self, game):

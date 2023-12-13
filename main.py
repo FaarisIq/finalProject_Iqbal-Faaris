@@ -160,16 +160,24 @@ class Game:
         text_rect = text_surface.get_rect(topleft=(x, y))
         self.screen.blit(text_surface, text_rect)
 
-
     def shoot(self):
-            # if the player presses space and the timer has been running for more than 0.3 seconds, create a bullet and shoot it
-            if pg.key.get_pressed()[pg.K_SPACE] and self.cd.delta > 0.3:
-                self.cd.event_time = pg.time.get_ticks()/1000
-                b = Bullet()
-                self.all_sprites.add(b)
-                self.all_bullets.add(b)
-                # sound effect
-                pg.mixer.Channel(1).play(pg.mixer.Sound(os.path.join(snd_folder, 'pew.wav')))
+        # Shooting logic
+        keys_p1 = pg.key.get_pressed()
+        keys_p2 = pg.key.get_pressed()
+
+        # Player 1 shooting
+        if keys_p1[pg.K_SPACE] and cd.delta > 0.3:
+            cd.event_time = pg.time.get_ticks() / 1000
+            bullet = Bullet(self.player1.pos, "left")  # pass player position and direction
+            self.all_sprites.add(bullet)
+            self.all_bullets.add(bullet)
+
+        # Player 2 shooting
+        if keys_p2[pg.K_RETURN] and cd.delta > 0.3:
+            cd.event_time = pg.time.get_ticks() / 1000
+            bullet = Bullet(self.player2.pos, "right")  # pass player position and direction
+            self.all_sprites.add(bullet)
+            self.all_bullets.add(bullet)
 
     def events(self):
         # Handle game events
