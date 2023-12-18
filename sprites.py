@@ -18,6 +18,8 @@ snd_folder = os.path.join(game_folder, 'sounds')
 # Player1 class
 class Player1(Sprite):
     def __init__(self, game):
+        self.direction = "right"  # Initial shooting direction
+
         Sprite.__init__(self)
         self.game = game
         # Load player image and set transparency
@@ -28,6 +30,17 @@ class Player1(Sprite):
         self.pos = vec(WIDTH/2 - 10, HEIGHT/2 + 100)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+    def controls(self):
+        # Player2 controls
+        keys = pg.key.get_pressed()
+        if keys[pg.K_LEFT]:
+            self.acc.x = -3
+        if keys[pg.K_RIGHT]:
+            self.acc.x = 3
+        if keys[pg.K_UP]:
+            self.jump()
+        if keys[pg.K_RETURN]:
+            self.shoot("right")
 
     def controls(self):
         # Player1 controls
@@ -65,8 +78,8 @@ class Player1(Sprite):
 class Bullet(Sprite):
     def __init__(self, player_pos, direction):
         Sprite.__init__(self)
-        self.image = pg.Surface((10, 10))  # Adjust the size of the bullet surface
-        self.image.fill(RED)  # Set the color of the bullet
+        self.image = pg.Surface((10, 10))
+        self.image.fill(RED)
         self.rect = self.image.get_rect()
 
         # Set initial position based on the player's position
@@ -78,9 +91,12 @@ class Bullet(Sprite):
         elif direction == "right":
             self.vel = vec(BULLET_SPEED, 0)
 
+        # Store the direction for collision checking
+        self.direction = direction
+
     def update(self):
-        # Update bullet position
         self.rect.x += self.vel.x
+
 
 
 
@@ -89,6 +105,8 @@ class Bullet(Sprite):
 class Player2(Sprite):
     def __init__(self, game):
         Sprite.__init__(self)
+        self.direction = "left"  # Initial shooting direction
+
         self.game = game
         # Load player image and set transparency
         self.image = pg.image.load(os.path.join(img_folder, 'theBigBell2.png')).convert()
@@ -98,7 +116,17 @@ class Player2(Sprite):
         self.pos = vec(WIDTH/2 + 60, HEIGHT/2 + 100)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
-
+    def controls(self):
+        # Player2 controls
+        keys = pg.key.get_pressed()
+        if keys[pg.K_LEFT]:
+            self.acc.x = -3
+        if keys[pg.K_RIGHT]:
+            self.acc.x = 3
+        if keys[pg.K_UP]:
+            self.jump()
+        if keys[pg.K_RETURN]:
+            self.shoot("left")
     def controls(self):
         # Player2 controls
         keys = pg.key.get_pressed()
@@ -152,5 +180,6 @@ class Platform(Sprite):
             self.rect.x += self.speed
             if self.rect.x + self.rect.w > WIDTH or self.rect.x < 0:
                 self.speed = -self.speed
+        
 
         

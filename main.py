@@ -34,20 +34,20 @@ p2win = False
 game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, 'images')
 snd_folder = os.path.join(game_folder, 'sounds')
-
-
-class Cooldown():
+class Cooldown:
     def __init__(self):
-        self.current_time = 0
-        self.event_time = 0
-        self.delta = 0
+        self.last_shot_time = 0
+        self.cooldown_duration = 0.3
 
-    def ticking(self):
-        self.current_time = (pg.time.get_ticks()) / 1000
-        self.delta = self.current_time - self.event_time
+    def can_shoot(self):
+        current_time = pg.time.get_ticks() / 1000
+        time_since_last_shot = current_time - self.last_shot_time
+        return time_since_last_shot >= self.cooldown_duration
 
-    def timer(self):
-        self.current_time = (pg.time.get_ticks()) / 100
+    def update_last_shot_time(self):
+        self.last_shot_time = pg.time.get_ticks() / 1000
+
+
 
 
 cd = Cooldown()
@@ -68,6 +68,7 @@ class Game:
         self.running = True
         self.start_time = pg.time.get_ticks()
         self.all_bullets = pg.sprite.Group()  # Initialize the all_bullets group here
+
 
     def new(self):
         # Create a group for all sprites
@@ -162,16 +163,14 @@ class Game:
         self.all_sprites.draw(self.screen)
 
         pg.display.flip()
-
-    def shoot(self, player, direction):
+    def shoot(self, player):
         # Shooting logic
-        if self.cooldown.delta > 0.3:
-            self.cooldown.event_time = pg.time.get_ticks() / 100
-            print(f"{player.__class__.__name__} shooting")  # Use __class__.__name__ to get the class name
-            bullet = Bullet(player.pos, direction)
+        if self.cooldown.can_shoot():
+            print(f"{player.__class__.__name__} shooting")
+            bullet = Bullet(player.pos, player.direction)
             self.all_sprites.add(bullet)
             self.all_bullets.add(bullet)
-
+            self.cooldown.update_last_shot_time()
 
 
 
@@ -186,14 +185,15 @@ class Game:
             # Handle key presses
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
-                    self.shoot(self.player1, "left")
+                    self.shoot(self.player1)
                 elif event.key == pg.K_RETURN:
-                    self.shoot(self.player2, "right")
+                    self.shoot(self.player2)
 
-            # Handle key releases
+            # Handle key releases (remove the KEYUP part if not needed)
             if event.type == pg.KEYUP:
                 if event.key in [pg.K_SPACE, pg.K_RETURN]:
-                    self.cooldown.ticking()  # Update the cooldown time
+                    # You can choose to do something here if needed
+                    pass
 
     def show_start_screen(self):
         # Display the start screen
