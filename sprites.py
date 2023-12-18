@@ -65,12 +65,12 @@ class Player1(Sprite):
 class Bullet(Sprite):
     def __init__(self, player_pos, direction):
         Sprite.__init__(self)
-        self.image = pg.image.load(os.path.join(img_folder, 'bullet.png')).convert()
-        self.image.set_colorkey(BLACK)
+        self.image = pg.Surface((10, 10))  # Adjust the size of the bullet surface
+        self.image.fill(RED)  # Set the color of the bullet
         self.rect = self.image.get_rect()
 
         # Set initial position based on the player's position
-        self.pos = vec(player_pos)
+        self.rect.center = player_pos
 
         # Set initial velocity based on the direction
         if direction == "left":
@@ -78,7 +78,13 @@ class Bullet(Sprite):
         elif direction == "right":
             self.vel = vec(BULLET_SPEED, 0)
 
-        self.acc = vec(0, 0)
+    def update(self):
+        # Update bullet position
+        self.rect.x += self.vel.x
+
+
+
+            
 # Player2 class (similar structure to Player1)
 class Player2(Sprite):
     def __init__(self, game):

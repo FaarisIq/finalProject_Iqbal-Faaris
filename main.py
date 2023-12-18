@@ -12,7 +12,7 @@ import math
 # Content from Chris Bradfield; Kids Can Code
 # Logo image source: https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2FDwayneJohnson%2Fphotos%2Fa.448580834383%2F10154509349039384%2F%3Ftype%3D3
 # KidsCanCode - Game Development with Pygame video series
-# Video link: https://youtu.be/OmlQ0XCvIn0 
+# Video link: https://youtu.be/OmlQ0XCvIn0
 
 # Title: gun arena
 
@@ -26,6 +26,7 @@ They also have a melee they can use if close enough
 
 # Define a vector
 vec = pg.math.Vector2
+
 p1win = False
 p2win = False
 
@@ -34,24 +35,31 @@ game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, 'images')
 snd_folder = os.path.join(game_folder, 'sounds')
 
+
 class Cooldown():
     def __init__(self):
         self.current_time = 0
         self.event_time = 0
         self.delta = 0
+
     def ticking(self):
-        self.current_time = (pg.time.get_ticks())/1000
+        self.current_time = (pg.time.get_ticks()) / 1000
         self.delta = self.current_time - self.event_time
+
     def timer(self):
-        self.current_time = (pg.time.get_ticks())/1000
+        self.current_time = (pg.time.get_ticks()) / 100
+
+
 cd = Cooldown()
+
 
 # Game class
 class Game:
     def __init__(self):
+        self.cooldown = Cooldown()
         self.p1_won = False
         self.p2_won = False
-        # Initialize pygame and create a windoww
+        # Initialize pygame and create a window
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -59,6 +67,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
         self.start_time = pg.time.get_ticks()
+        self.all_bullets = pg.sprite.Group()  # Initialize the all_bullets group here
 
     def new(self):
         # Create a group for all sprites
@@ -82,13 +91,13 @@ class Game:
             self.all_sprites.add(plat)
             self.all_platforms.add(plat)
 
-
         self.run()
+
     def draw_text(self, text, size, color, x, y):
         # Draw text on the screen
         font = pg.font.Font(None, size)
         text_surface = font.render(text, True, color)
-        text_rect = text_surface.get_rect(center=(x, y))
+        text_rect = text_surface.get_rect(topleft=(x, y))
         self.screen.blit(text_surface, text_rect)
     def run(self):
         # Game loop
@@ -99,7 +108,6 @@ class Game:
             self.events()
             self.update()
             self.draw()
-            self.shoot()  # Add this line to check for player input and shoot bullets
 
             # Check for player wins
             if self.player2.rect.y > HEIGHT and not self.p1_won:
@@ -125,6 +133,8 @@ class Game:
 
         # Quit pygame
         pg.quit()
+
+
     def update(self):
         # Update all sprites
         self.all_sprites.update()
@@ -151,35 +161,19 @@ class Game:
         self.draw_text(f"Time: {elapsed_time}s", 30, WHITE, WIDTH // 2 - 43, 10)
         self.all_sprites.draw(self.screen)
 
-
         pg.display.flip()
 
-    def draw_text(self, text, size, color, x, y):
-        # Draw text on the screen
-        font = pg.font.Font(None, size)
-        text_surface = font.render(text, True, color)
-        text_rect = text_surface.get_rect(topleft=(x, y))
-        self.screen.blit(text_surface, text_rect)
-
-    def shoot(self):
+    def shoot(self, player, direction):
         # Shooting logic
-        pg.init()
-        keys_p1 = pg.key.get_pressed()
-        keys_p2 = pg.key.get_pressed()
-
-        # Player 1 shooting
-        if keys_p1[pg.K_SPACE] and cd.delta > 0.3:
-            cd.event_time = pg.time.get_ticks() / 1000
-            bullet = Bullet(self.player1.pos, "left")  # pass player position and direction
+        if self.cooldown.delta > 0.3:
+            self.cooldown.event_time = pg.time.get_ticks() / 100
+            print(f"{player.__class__.__name__} shooting")  # Use __class__.__name__ to get the class name
+            bullet = Bullet(player.pos, direction)
             self.all_sprites.add(bullet)
             self.all_bullets.add(bullet)
 
-        # Player 2 shooting
-        if keys_p2[pg.K_RETURN] and cd.delta > 0.3:
-            cd.event_time = pg.time.get_ticks() / 1000
-            bullet = Bullet(self.player2.pos, "right")  # pass player position and direction
-            self.all_sprites.add(bullet)
-            self.all_bullets.add(bullet)
+
+
 
     def events(self):
         # Handle game events
@@ -188,6 +182,18 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
+
+            # Handle key presses
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    self.shoot(self.player1, "left")
+                elif event.key == pg.K_RETURN:
+                    self.shoot(self.player2, "right")
+
+            # Handle key releases
+            if event.type == pg.KEYUP:
+                if event.key in [pg.K_SPACE, pg.K_RETURN]:
+                    self.cooldown.ticking()  # Update the cooldown time
 
     def show_start_screen(self):
         # Display the start screen
@@ -202,9 +208,10 @@ class Game:
 gamerun = True
 g = Game()
 while gamerun:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            running = False
     g.new()
     g.shoot()
-
-
 # Quit pygame
 pg.quit()
