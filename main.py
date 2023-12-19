@@ -59,6 +59,8 @@ class Game:
         self.cooldown = Cooldown()
         self.p1_won = False
         self.p2_won = False
+        self.cooldown_p1 = Cooldown()
+        self.cooldown_p2 = Cooldown()
         # Initialize pygame and create a window
         pg.init()
         pg.mixer.init()
@@ -163,16 +165,19 @@ class Game:
         self.all_sprites.draw(self.screen)
 
         pg.display.flip()
-    def shoot(self, player):
-        # Shooting logic
-        if self.cooldown.can_shoot():
+    def shoot(self, player, bullet_class):
+        if player.__class__.__name__ == "Player1" and self.cooldown_p1.can_shoot():
             print(f"{player.__class__.__name__} shooting")
-            bullet = Bullet(player.pos, player.direction)
+            bullet = bullet_class(player.pos, player.direction)
             self.all_sprites.add(bullet)
             self.all_bullets.add(bullet)
-            self.cooldown.update_last_shot_time()
-
-
+            self.cooldown_p1.update_last_shot_time()
+        elif player.__class__.__name__ == "Player2" and self.cooldown_p2.can_shoot():
+            print(f"{player.__class__.__name__} shooting")
+            bullet = bullet_class(player.pos, player.direction)
+            self.all_sprites.add(bullet)
+            self.all_bullets.add(bullet)
+            self.cooldown_p2.update_last_shot_time()
 
     def events(self):
         # Handle game events
@@ -185,16 +190,15 @@ class Game:
             # Handle key presses
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
-                    self.shoot(self.player1)
+                    self.shoot(self.player1, Bullet1)  # Pass Bullet1 for Player1
                 elif event.key == pg.K_RETURN:
-                    self.shoot(self.player2)
+                    self.shoot(self.player2, Bullet2)  # Pass Bullet2 for Player2
 
             # Handle key releases (remove the KEYUP part if not needed)
             if event.type == pg.KEYUP:
                 if event.key in [pg.K_SPACE, pg.K_RETURN]:
                     # You can choose to do something here if needed
                     pass
-
     def show_start_screen(self):
         # Display the start screen
         pass

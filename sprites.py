@@ -75,28 +75,45 @@ class Player1(Sprite):
         if self.pos.y < 0:
             self.pos.y = 15
 
-class Bullet(Sprite):
+# Bullet1 class
+class Bullet1(Sprite):
     def __init__(self, player_pos, direction):
         Sprite.__init__(self)
         self.image = pg.Surface((10, 10))
-        self.image.fill(RED)
+        self.image.fill(BLUE)  # Choose the color for Bullet1
         self.rect = self.image.get_rect()
 
-        # Set initial position based on the player's position
         self.rect.center = player_pos
 
-        # Set initial velocity based on the direction
         if direction == "left":
             self.vel = vec(-BULLET_SPEED, 0)
         elif direction == "right":
             self.vel = vec(BULLET_SPEED, 0)
 
-        # Store the direction for collision checking
         self.direction = direction
 
     def update(self):
         self.rect.x += self.vel.x
 
+# Bullet2 class
+class Bullet2(Sprite):
+    def __init__(self, player_pos, direction):
+        Sprite.__init__(self)
+        self.image = pg.Surface((10, 10))
+        self.image.fill(GREEN)  # Choose the color for Bullet2
+        self.rect = self.image.get_rect()
+
+        self.rect.center = player_pos
+
+        if direction == "left":
+            self.vel = vec(-BULLET_SPEED, 0)
+        elif direction == "right":
+            self.vel = vec(BULLET_SPEED, 0)
+
+        self.direction = direction
+
+    def update(self):
+        self.rect.x += self.vel.x
 
 
 
