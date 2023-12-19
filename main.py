@@ -183,7 +183,9 @@ class Game:
 
         pg.display.flip()
 
+    # Shooting function
     def shoot(self, player, bullet_class):
+        # Checking if player has eligibility to shoot
         if player.__class__.__name__ == "Player1" and self.cooldown_p1.can_shoot():
             bullet = bullet_class(player.pos, player.direction)
             self.all_sprites.add(bullet)
@@ -210,10 +212,9 @@ class Game:
                 elif event.key == pg.K_RETURN:
                     self.shoot(self.player2, Bullet2)  # Pass Bullet2 for Player2
 
-            # Handle key releases (remove the KEYUP part if not needed)
+            # Handle key releases 
             if event.type == pg.KEYUP:
                 if event.key in [pg.K_SPACE, pg.K_RETURN]:
-                    # You can choose to do something here if needed
                     pass
 
     def show_start_screen(self):
