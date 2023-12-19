@@ -42,8 +42,6 @@ class Player1(Sprite):
             self.acc.x = 3
         if keys[pg.K_w]:
             self.jump()
-        if keys[pg.K_RETURN]:
-            self.shoot("right")
 
     def jump(self):
         # Player1 jump
@@ -137,8 +135,6 @@ class Player2(Sprite):
             self.acc.x = 3
         if keys[pg.K_UP]:
             self.jump()
-        if keys[pg.K_RETURN]:
-            self.shoot("left")
 
     def jump(self):
         # Player2 jump
