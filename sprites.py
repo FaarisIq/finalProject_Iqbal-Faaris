@@ -2,6 +2,8 @@
 # Content from Chris Bradfield; Kids Can Code
 # KidsCanCode - Game Development with Pygame video series
 # Video link: https://youtu.be/OmlQ0XCvIn0 
+# Help from Isaiah Garcia
+# ChatGPT helped me smooth some rough edges lol
 
 import pygame as pg
 from pygame.locals import *
@@ -30,17 +32,6 @@ class Player1(Sprite):
         self.pos = vec(WIDTH/2 - 10, HEIGHT/2 + 100)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
-    def controls(self):
-        # Player2 controls
-        keys = pg.key.get_pressed()
-        if keys[pg.K_LEFT]:
-            self.acc.x = -3
-        if keys[pg.K_RIGHT]:
-            self.acc.x = 3
-        if keys[pg.K_UP]:
-            self.jump()
-        if keys[pg.K_RETURN]:
-            self.shoot("right")
 
     def controls(self):
         # Player1 controls
@@ -51,6 +42,8 @@ class Player1(Sprite):
             self.acc.x = 3
         if keys[pg.K_w]:
             self.jump()
+        if keys[pg.K_RETURN]:
+            self.shoot("right")
 
     def jump(self):
         # Player1 jump
@@ -84,7 +77,7 @@ class Bullet1(Sprite):
         self.rect = self.image.get_rect()
 
         # Set the initial position further away from the player to the left
-        offset = -10  # Adjust this offset as needed
+        offset = -10 # Offset so that when bullet is shot, players own bullet doesn't hit them.
         self.rect.midleft = (player_pos[0] - offset, player_pos[1])
 
         if direction == "left":
@@ -97,7 +90,6 @@ class Bullet1(Sprite):
     def update(self):
         self.rect.x += self.vel.x
 
-
 # Bullet2 class
 class Bullet2(Sprite):
     def __init__(self, player_pos, direction):
@@ -107,7 +99,7 @@ class Bullet2(Sprite):
         self.rect = self.image.get_rect()
 
         # Set the initial position further away from the player to the right
-        offset = -10  # Adjust this offset as needed
+        offset = -10  # Offset so that when bullet is shot, players own bullet doesn't hit them.
         self.rect.midright = (player_pos[0] + offset, player_pos[1])
 
         if direction == "left":
@@ -120,7 +112,6 @@ class Bullet2(Sprite):
     def update(self):
         self.rect.x += self.vel.x
 
-            
 # Player2 class (similar structure to Player1)
 class Player2(Sprite):
     def __init__(self, game):
@@ -136,6 +127,7 @@ class Player2(Sprite):
         self.pos = vec(WIDTH/2 + 60, HEIGHT/2 + 100)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+
     def controls(self):
         # Player2 controls
         keys = pg.key.get_pressed()
@@ -147,15 +139,6 @@ class Player2(Sprite):
             self.jump()
         if keys[pg.K_RETURN]:
             self.shoot("left")
-    def controls(self):
-        # Player2 controls
-        keys = pg.key.get_pressed()
-        if keys[pg.K_LEFT]:
-            self.acc.x = -3
-        if keys[pg.K_RIGHT]:
-            self.acc.x = 3
-        if keys[pg.K_UP]:
-            self.jump()
 
     def jump(self):
         # Player2 jump
@@ -200,6 +183,3 @@ class Platform(Sprite):
             self.rect.x += self.speed
             if self.rect.x + self.rect.w > WIDTH or self.rect.x < 0:
                 self.speed = -self.speed
-        
-
-        

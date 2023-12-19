@@ -13,6 +13,8 @@ import math
 # Logo image source: https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2FDwayneJohnson%2Fphotos%2Fa.448580834383%2F10154509349039384%2F%3Ftype%3D3
 # KidsCanCode - Game Development with Pygame video series
 # Video link: https://youtu.be/OmlQ0XCvIn0
+# Help from Isaiah Garcia
+# ChatGPT helped me smooth some rough edges lol
 
 # Title: gun arena
 
@@ -34,6 +36,8 @@ p2win = False
 game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, 'images')
 snd_folder = os.path.join(game_folder, 'sounds')
+
+# Cooldown class for controlling the shooting cooldown
 class Cooldown:
     def __init__(self):
         self.last_shot_time = 0
@@ -47,20 +51,19 @@ class Cooldown:
     def update_last_shot_time(self):
         self.last_shot_time = pg.time.get_ticks() / 1000
 
-
-
-
+# Instance of Cooldown class
 cd = Cooldown()
-
 
 # Game class
 class Game:
     def __init__(self):
+        # Initialize game-related variables
         self.cooldown = Cooldown()
         self.p1_won = False
         self.p2_won = False
         self.cooldown_p1 = Cooldown()
         self.cooldown_p2 = Cooldown()
+
         # Initialize pygame and create a window
         pg.init()
         pg.mixer.init()
@@ -71,12 +74,12 @@ class Game:
         self.start_time = pg.time.get_ticks()
         self.all_bullets = pg.sprite.Group()  # Initialize the all_bullets group here
 
-
     def new(self):
         # Create a group for all sprites
         self.score = 0
         self.all_sprites = pg.sprite.Group()
         self.all_platforms = pg.sprite.Group()
+
         # Instantiate player classes
         self.player1 = Player1(self)
         self.player2 = Player2(self)
@@ -102,6 +105,7 @@ class Game:
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect(topleft=(x, y))
         self.screen.blit(text_surface, text_rect)
+
     def run(self):
         # Game loop
         self.playing = True
@@ -111,9 +115,6 @@ class Game:
             self.events()
             self.update()
             self.draw()
-
-
-
 
     def update(self):
         # Update all sprites
@@ -172,6 +173,7 @@ class Game:
 
         # Quit pygame
         pg.quit()
+
     def draw(self):
         # Draw the game screen
         self.screen.fill(BLACK)
@@ -180,6 +182,7 @@ class Game:
         self.all_sprites.draw(self.screen)
 
         pg.display.flip()
+
     def shoot(self, player, bullet_class):
         if player.__class__.__name__ == "Player1" and self.cooldown_p1.can_shoot():
             bullet = bullet_class(player.pos, player.direction)
@@ -191,6 +194,7 @@ class Game:
             self.all_sprites.add(bullet)
             self.all_bullets.add(bullet)
             self.cooldown_p2.update_last_shot_time()
+
     def events(self):
         # Handle game events
         for event in pg.event.get():
@@ -211,6 +215,7 @@ class Game:
                 if event.key in [pg.K_SPACE, pg.K_RETURN]:
                     # You can choose to do something here if needed
                     pass
+
     def show_start_screen(self):
         # Display the start screen
         pass
@@ -218,7 +223,6 @@ class Game:
     def show_go_screen(self):
         # Display the game over screen
         pass
-
 
 # Game loop
 gamerun = True
@@ -229,5 +233,6 @@ while gamerun:
             running = False
     g.new()
     g.shoot()
+
 # Quit pygame
 pg.quit()
