@@ -112,30 +112,7 @@ class Game:
             self.update()
             self.draw()
 
-            # Check for player wins
-            if self.player2.rect.y > HEIGHT and not self.p1_won:
-                self.p1_won = True
-                self.p1_survival_time = (pg.time.get_ticks() - self.start_time) // 1000
-                print("p1 win")
-                game_over = True
-            if self.player1.rect.y > HEIGHT and not self.p2_won:
-                self.p2_won = True
-                self.p2_survival_time = (pg.time.get_ticks() - self.start_time) // 1000
-                print("p2 win")
-                game_over = True
 
-        # Display win screen
-        elapsed_time = (pg.time.get_ticks() - self.start_time) // 1000
-        if self.p1_won:
-            self.draw_text(f"Player 1 has won! Survived for {elapsed_time}s", 20, WHITE, WIDTH // 2 - 100, HEIGHT // 2)
-        elif self.p2_won:
-            self.draw_text(f"Player 2 has won! Survived for {elapsed_time}s", 20, WHITE, WIDTH // 2 - 100, HEIGHT // 2)
-
-        pg.display.flip()
-        pg.time.wait(5000)  # Wait for 5 seconds
-
-        # Quit pygame
-        pg.quit()
 
 
     def update(self):
@@ -174,16 +151,27 @@ class Game:
         if not self.cooldown_p1.can_shoot():
             return  # Ignore hits if the player has just shot
         self.p1_won = True
+        elapsed_time = (pg.time.get_ticks() - self.start_time) // 1000
         self.p1_survival_time = (pg.time.get_ticks() - self.start_time) // 1000
-        print("Player 1 hit! Game over.")
+        self.draw_text(f"Player 2 has won! Survived for {elapsed_time}s", 20, WHITE, WIDTH // 2 - 100, HEIGHT // 2)
+        pg.display.flip()
+        pg.time.wait(5000)  # Wait for 5 seconds
+
+        # Quit pygame
+        pg.quit()
 
     def player2_hit(self):
         if not self.cooldown_p2.can_shoot():
             return  # Ignore hits if the player has just shot
         self.p2_won = True
+        elapsed_time = (pg.time.get_ticks() - self.start_time) // 1000
         self.p2_survival_time = (pg.time.get_ticks() - self.start_time) // 1000
-        print("Player 2 hit! Game over.")
-        
+        self.draw_text(f"Player 1 has won! Survived for {elapsed_time}s", 20, WHITE, WIDTH // 2 - 100, HEIGHT // 2)
+        pg.display.flip()
+        pg.time.wait(5000)  # Wait for 5 seconds
+
+        # Quit pygame
+        pg.quit()
     def draw(self):
         # Draw the game screen
         self.screen.fill(BLACK)
@@ -193,15 +181,12 @@ class Game:
 
         pg.display.flip()
     def shoot(self, player, bullet_class):
-        print(f"Calling shoot for {player.__class__.__name__}")
         if player.__class__.__name__ == "Player1" and self.cooldown_p1.can_shoot():
-            print(f"{player.__class__.__name__} shooting")
             bullet = bullet_class(player.pos, player.direction)
             self.all_sprites.add(bullet)
             self.all_bullets.add(bullet)
             self.cooldown_p1.update_last_shot_time()
         elif player.__class__.__name__ == "Player2" and self.cooldown_p2.can_shoot():
-            print(f"{player.__class__.__name__} shooting")
             bullet = bullet_class(player.pos, player.direction)
             self.all_sprites.add(bullet)
             self.all_bullets.add(bullet)
