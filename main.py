@@ -142,6 +142,18 @@ class Game:
         # Update all sprites
         self.all_sprites.update()
 
+        # Check for bullet collisions with players
+        hits_p1 = pg.sprite.spritecollide(self.player1, self.all_bullets, True, pg.sprite.collide_mask)
+        hits_p2 = pg.sprite.spritecollide(self.player2, self.all_bullets, True, pg.sprite.collide_mask)
+
+        # Handle player 1 hits
+        if hits_p1:
+            self.player1_hit()
+
+        # Handle player 2 hits
+        if hits_p2:
+            self.player2_hit()
+
         # Prevent player from falling through the platform
         if self.player1.vel.y >= 0:
             hits = pg.sprite.spritecollide(self.player1, self.all_platforms, False)
@@ -157,6 +169,21 @@ class Game:
                 self.player2.vel.y = 0
                 self.player2.vel.x = hits[0].speed * 1.5
 
+    # Add these methods to handle player hits
+    def player1_hit(self):
+        if not self.cooldown_p1.can_shoot():
+            return  # Ignore hits if the player has just shot
+        self.p1_won = True
+        self.p1_survival_time = (pg.time.get_ticks() - self.start_time) // 1000
+        print("Player 1 hit! Game over.")
+
+    def player2_hit(self):
+        if not self.cooldown_p2.can_shoot():
+            return  # Ignore hits if the player has just shot
+        self.p2_won = True
+        self.p2_survival_time = (pg.time.get_ticks() - self.start_time) // 1000
+        print("Player 2 hit! Game over.")
+        
     def draw(self):
         # Draw the game screen
         self.screen.fill(BLACK)
@@ -166,6 +193,7 @@ class Game:
 
         pg.display.flip()
     def shoot(self, player, bullet_class):
+        print(f"Calling shoot for {player.__class__.__name__}")
         if player.__class__.__name__ == "Player1" and self.cooldown_p1.can_shoot():
             print(f"{player.__class__.__name__} shooting")
             bullet = bullet_class(player.pos, player.direction)
@@ -178,7 +206,6 @@ class Game:
             self.all_sprites.add(bullet)
             self.all_bullets.add(bullet)
             self.cooldown_p2.update_last_shot_time()
-
     def events(self):
         # Handle game events
         for event in pg.event.get():

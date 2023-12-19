@@ -83,7 +83,9 @@ class Bullet1(Sprite):
         self.image.fill(BLUE)  # Choose the color for Bullet1
         self.rect = self.image.get_rect()
 
-        self.rect.center = player_pos
+        # Set the initial position further away from the player to the left
+        offset = -10  # Adjust this offset as needed
+        self.rect.midleft = (player_pos[0] - offset, player_pos[1])
 
         if direction == "left":
             self.vel = vec(-BULLET_SPEED, 0)
@@ -94,6 +96,7 @@ class Bullet1(Sprite):
 
     def update(self):
         self.rect.x += self.vel.x
+
 
 # Bullet2 class
 class Bullet2(Sprite):
@@ -103,7 +106,9 @@ class Bullet2(Sprite):
         self.image.fill(GREEN)  # Choose the color for Bullet2
         self.rect = self.image.get_rect()
 
-        self.rect.center = player_pos
+        # Set the initial position further away from the player to the right
+        offset = -10  # Adjust this offset as needed
+        self.rect.midright = (player_pos[0] + offset, player_pos[1])
 
         if direction == "left":
             self.vel = vec(-BULLET_SPEED, 0)
@@ -114,8 +119,6 @@ class Bullet2(Sprite):
 
     def update(self):
         self.rect.x += self.vel.x
-
-
 
             
 # Player2 class (similar structure to Player1)
